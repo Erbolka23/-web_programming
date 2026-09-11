@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Список ивентов</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+      <div class="container px-4">
+        <a class="navbar-brand" href="#page-top">Events</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#events">Events</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header-->
+    <header class="bg-primary bg-gradient text-white py-5 mt-5">
+      <div class="container px-4 text-center my-5">
+        <h1 class="fw-bolder">Добро пожаловать</h1>
+        <p class="lead">Список актуальных событий и мероприятий</p>
+        <a class="btn btn-lg btn-light" href="#events">Посмотреть ивенты</a>
+      </div>
+    </header>
+
+    <!-- Events section-->
+    <section id="events" class="py-5">
+      <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+          <div class="col-lg-8">
+            <h2 class="mb-4">Список событий</h2>
+            {% for event in events %}
+              <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                  <h3 class="card-title h4">{{ event.title }}</h3>
+                  {% if event.poster %}
+                    <img src="{{ event.poster.url }}" class="img-fluid mb-2" alt="{{ event.title }}">
+                  {% endif %}
+                  {% if event.starts_at %}
+                    <h6 class="card-subtitle mb-2 text-muted">{{ event.starts_at }}</h6>
+                  {% endif %}
+                  {% if event.summary %}
+                    <p class="card-text fw-semibold">{{ event.summary }}</p>
+                  {% endif %}
+                  {% if event.description %}
+                    <p class="card-text">{{ event.description }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            {% empty %}
+              <p class="lead text-muted">Событий пока нет.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About section-->
+    <section id="about" class="bg-light py-5">
+      <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+          <div class="col-lg-8">
+            <h2>About this page</h2>
+            <p class="lead">
+              Это раздел о нас. Здесь можно рассказать о проекте, его целях и
+              команде, которая занимается организацией событий.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services section-->
+    <section id="services" class="py-5">
+      <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+          <div class="col-lg-8">
+            <h2>Services we offer</h2>
+            <p class="lead">
+              Организация мероприятий, продажа билетов, консультации и
+              сопровождение events под ключ.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact section-->
+    <section id="contact" class="bg-light py-5">
+      <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+          <div class="col-lg-8">
+            <h2>Contact us</h2>
+            <p class="lead">
+              Свяжитесь с нами по почте или телефону, указанным в футере сайта.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer-->
+    <footer class="py-5 bg-dark">
+      <div class="container px-4">
+        <p class="m-0 text-center text-white">Copyright &copy; Events 2026</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
