@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block content %}
+<nav aria-label="Навигация" class="mb-4">
+  <a class="small fw-bold text-success text-decoration-none" href="{% url 'event_list' %}">← Все события</a>
+</nav>
+<article class="row g-4 g-lg-5">
+  <div class="col-lg-7">
+    {% if event.poster %}
+      <img class="w-100 rounded-1 shadow-sm" src="{{ event.poster.url }}" alt="Постер события «{{ event.title }}»" style="max-height: 560px; object-fit: cover;">
+    {% else %}
+      <div class="poster-placeholder rounded-1" style="font-size: 4rem;">{{ event.date|date:'d' }}</div>
+    {% endif %}
+  </div>
+  <div class="col-lg-5">
+    <p class="eyebrow mb-2">{{ event.date|date:'l, j E · H:i' }}</p>
+    <h1 class="display-title mb-3">{{ event.title }}</h1>
+    <p class="fs-5 mb-4">{{ event.location }}</p>
+    {% if event.organizer %}<p class="meta-line mb-4">Организатор: {{ event.organizer.username }}</p>{% endif %}
+    {% if event.summary %}<p class="fw-bold">{{ event.summary }}</p>{% endif %}
+    <div class="text-secondary lh-lg mb-4">{{ event.description|linebreaks }}</div>
+    {% if user.is_authenticated and user == event.organizer %}
+      <div class="d-flex flex-wrap gap-2 border-top pt-4">
+        <a class="btn btn-forest" href="{% url 'event_update' event.slug %}">Редактировать</a>
+        <a class="btn btn-outline-danger" href="{% url 'event_delete' event.slug %}">Удалить</a>
+      </div>
+    {% endif %}
+  </div>
+</article>
+{% endblock %}

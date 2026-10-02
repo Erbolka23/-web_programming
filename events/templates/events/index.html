@@ -56,12 +56,14 @@
             {% for event in events %}
               <div class="card mb-3 shadow-sm">
                 <div class="card-body">
-                  <h3 class="card-title h4">{{ event.title }}</h3>
+                  <h3 class="card-title h4">
+                    <a href="{% url 'event_detail' event.pk %}">{{ event.title }}</a>
+                  </h3>
                   {% if event.poster %}
                     <img src="{{ event.poster.url }}" class="img-fluid mb-2" alt="{{ event.title }}">
                   {% endif %}
-                  {% if event.starts_at %}
-                    <h6 class="card-subtitle mb-2 text-muted">{{ event.starts_at }}</h6>
+                  {% if event.date %}
+                    <h6 class="card-subtitle mb-2 text-muted">{{ event.date }}</h6>
                   {% endif %}
                   {% if event.summary %}
                     <p class="card-text fw-semibold">{{ event.summary }}</p>

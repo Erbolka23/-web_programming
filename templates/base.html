@@ -1,0 +1,106 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172520">
+  <title>{% block title %}Мероприятия{% endblock %} | Встречи</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #172520;
+      --forest: #20563f;
+      --leaf: #d9f0df;
+      --coral: #d96f59;
+      --paper: #f5f8f5;
+      --line: #dce6df;
+      --muted: #64736b;
+    }
+    body { background: var(--paper); color: var(--ink); font-family: "Manrope", sans-serif; min-height: 100vh; }
+    .site-nav { background: var(--ink); }
+    .brand-mark { color: #a9e1b7; font-family: "DM Serif Display", Georgia, serif; font-size: 1.55rem; }
+    .navbar .nav-link, .navbar .navbar-text { color: #e2ebe5; }
+    .navbar .nav-link:hover { color: #a9e1b7; }
+    .search-input { min-width: 220px; }
+    .btn-forest { background: var(--forest); border-color: var(--forest); color: #fff; }
+    .btn-forest:hover { background: #163f2e; border-color: #163f2e; color: #fff; }
+    .btn-coral { background: var(--coral); border-color: var(--coral); color: #fff; }
+    .btn-coral:hover { background: #bd5845; border-color: #bd5845; color: #fff; }
+    .page-shell { animation: page-in .45s ease-out both; }
+    .eyebrow { color: var(--forest); font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .display-title { font-family: "DM Serif Display", Georgia, serif; font-size: clamp(2.2rem, 2.8rem, 3rem); line-height: 1.06; }
+    .event-card { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; transition: transform .18s ease, box-shadow .18s ease; }
+    .event-card:hover { box-shadow: 0 14px 34px rgb(23 37 32 / 9%); transform: translateY(-3px); }
+    .event-card:nth-child(2) { animation-delay: 50ms; }
+    .event-card:nth-child(3) { animation-delay: 100ms; }
+    .event-card:nth-child(4) { animation-delay: 150ms; }
+    .event-card:nth-child(5) { animation-delay: 200ms; }
+    .event-card:nth-child(6) { animation-delay: 250ms; }
+    .poster-frame { aspect-ratio: 16 / 9; background: linear-gradient(135deg, #d9f0df, #f3c9bd); object-fit: cover; width: 100%; }
+    .poster-placeholder { align-items: center; background: repeating-linear-gradient(135deg, #e4eee7 0 14px, #edf4ef 14px 28px); color: var(--forest); display: flex; font-family: "DM Serif Display", Georgia, serif; font-size: 2rem; justify-content: center; aspect-ratio: 16 / 9; }
+    .meta-line { color: var(--muted); font-size: .9rem; }
+    .form-control, .form-select { border-color: var(--line); border-radius: 4px; }
+    .form-control:focus { border-color: var(--forest); box-shadow: 0 0 0 .2rem rgb(32 86 63 / 14%); }
+    .site-footer { border-top: 1px solid var(--line); color: var(--muted); }
+    @keyframes page-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark site-nav">
+    <div class="container py-1">
+      <a class="navbar-brand brand-mark" href="{% url 'event_list' %}">Встречи<span class="text-white">.</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Открыть меню">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <form class="d-flex mx-lg-auto my-3 my-lg-0" action="{% url 'event_list' %}" method="get" role="search">
+          <input class="form-control search-input" type="search" name="q" value="{{ request.GET.q }}" placeholder="Название или место" aria-label="Поиск мероприятий">
+          <button class="btn btn-light ms-2" type="submit">Найти</button>
+        </form>
+        <div class="d-flex align-items-lg-center gap-3 flex-column flex-lg-row align-items-start pb-3 pb-lg-0">
+          {% if user.is_authenticated %}
+            <span class="navbar-text">Привет, {{ user.username }}</span>
+            <a class="btn btn-sm btn-outline-light" href="{% url 'event_create' %}">Создать событие</a>
+            <form action="{% url 'logout' %}" method="post" class="m-0">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-link link-light text-decoration-none px-0" type="submit">Выйти</button>
+            </form>
+          {% else %}
+            <a class="nav-link p-0" href="{% url 'login' %}">Войти</a>
+            <a class="btn btn-sm btn-light" href="{% url 'register' %}">Регистрация</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4 py-lg-5 page-shell">
+    {% if messages %}
+      <div class="mb-4" aria-live="polite">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="status">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer mt-auto py-4">
+    <div class="container d-flex flex-column flex-sm-row justify-content-between gap-2 small">
+      <span>Встречи · афиша мероприятий</span>
+      <span>Находите людей и события рядом</span>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>
